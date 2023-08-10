@@ -31,7 +31,8 @@ class TestBaseModel(unittest.TestCase):
 
     def test__str__(self):
         """To test the string reprensentation"""
-        value = f"[{self.b.__class__.__name__}] ({self.b.id}) {self.b.__dict__}"
+        value = f"[{self.b.__class__.__name__}]\
+ ({self.b.id}) {self.b.__dict__}"
         self.assertEqual(self.b.__str__(), value)
 
     def test_to_dict(self):
