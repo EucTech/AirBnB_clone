@@ -8,6 +8,7 @@ from datetime import datetime
 # from models import storage
 import models
 
+
 class BaseModel():
     """This is the base class"""
     def __init__(self, *args, **kwargs):
