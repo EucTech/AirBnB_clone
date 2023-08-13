@@ -3,6 +3,7 @@
 
 import cmd
 import sys
+import shlex
 import re
 from models import storage
 from models.amenity import Amenity
@@ -44,6 +45,7 @@ class HBNBCommand(cmd.Cmd):
         if arg not in storage.classes():
             print("** class doesn't exist **")
             return
+        # gets the class name
         obj = storage.classes()[arg]()
         obj.save()
         print(obj.id)
@@ -64,8 +66,8 @@ class HBNBCommand(cmd.Cmd):
             if len(argss) < 2:
                 print("** instance id missing **")
                 return
-            id = argss[1]
-            key = ".".join(argss[0], argss[1])
+
+            key = f"{argss[0]}.{argss[1]}"
             if key not in storage.all():
                 print("** no instance found **")
             else:
@@ -76,24 +78,24 @@ class HBNBCommand(cmd.Cmd):
         Deletes an instance based on the class name
         and id (save the change into the JSON file)
         """
-        if args is None:
+        argss = args.split()
+        if len(argss) < 1:
             print("** class name missing **")
             return
+
+        if argss[0] not in storage.classes():
+            print("** class doesn't exist **")
+            return
+        if len(argss) < 2:
+            print("** instance id missing **")
+            return
+
+        key = "{}.{}".format(argss[0], argss[1])
+        if key not in storage.all():
+            print("** no instance found **")
         else:
-            argss = args.split()
-            if argss[0] not in storage.classes():
-                print("** class doesn't exist **")
-                return
-            if len(argss) < 2:
-                print("** instance id missing **")
-                return
-            id = argss[1]
-            key = ".".join(argss[0], argss[1])
-            if key not in storage.all():
-                print("** no instance found **")
-            else:
-                del storage.all()[key]
-                storage.save()
+            del storage.all()[key]
+            storage.save()
 
     def do_all(self, args):
         """
@@ -105,29 +107,53 @@ class HBNBCommand(cmd.Cmd):
             if argss[0] not in storage.classes():
                 print("** class doesn't exist **")
             else:
-                    print([str(value) for key, value in storage.all().items()
-                        if type(value).__name__ == argss[0]])
+                print([str(value) for key, value in storage.all().items()
+                      if type(value).__name__ == argss[0]])
         else:
             print([str(value) for key, value in storage.all().items()])
-        
+
     def do_update(self, args):
         """
         Updates an instance based on the class name and id by adding
         or updating attribute (save the change into the JSON file)
         """
-        if args is None:
+        value = shlex.split(args)
+        if len(value) == 0:
             print("** class name missing **")
             return
+        if value[0] not in storage.classes():
+            print("** class doesn't exist **")
+            return
+        if len(value) < 2:
+            print("** instance id missing **")
+            return
 
+        ins_id = value[1]
+        # check if the instance exists using
+        # the id and classname
+        key = f"{value[0]}.{ins_id}"
+        if key not in storage.all():
+            print("** no instance found **")
+            return
 
+        obj = storage.all()[key]
 
+        try:
+            if len(value) < 3:
+                print("** attribute name missing **")
+                return
+                # checking if the attribute has no value
+            if len(value) < 4:
+                print("** value missing **")
+            else:
+                attr_name = value[2]
+                attr_value = value[3].strip('"')
 
-
-
-
-
-
-
+                setattr(obj, attr_name, eval(attr_value))
+                setattr(obj, attr_name, attr_value)
+        except Exception as e:
+            pass
+            storage.save()
 
 
 if __name__ == '__main__':

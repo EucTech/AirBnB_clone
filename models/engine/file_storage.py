@@ -24,7 +24,7 @@ class FileStorage:
     def all(self):
         """returns the dictionary __objects"""
         return self.__objects
-    
+
     def classes(self):
         """returns all classes"""
         classes = {
@@ -60,7 +60,7 @@ class FileStorage:
         """
         with open(self.__file_path, "w", encoding="utf-8") as file1:
             obj_dict = {key: value.to_dict()
-                    for key, value in self.__objects.items()}
+                        for key, value in self.__objects.items()}
             json.dump(obj_dict, file1)
 
     def reload(self):
