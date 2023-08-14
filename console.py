@@ -190,6 +190,14 @@ class HBNBCommand(cmd.Cmd):
             val = f"{value[0]} {ins_id}"
             self.do_destroy(val)
 
+        elif "update" in value[1]:
+            arg = value[1].split("(")[1].strip(")").split(", ")
+            ins_id = arg[0].strip('"')
+            attr_name = arg[1].strip('"')
+            attr_value = arg[2].strip('"')
+            update = f"{value[0]} {ins_id} {attr_name} {attr_value}"
+            self.do_update(update)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
