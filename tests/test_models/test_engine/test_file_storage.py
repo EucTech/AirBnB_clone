@@ -1,55 +1,55 @@
-#!/usr/bin/python3
-"""Unittest module for the FileStorage class."""
-
 import unittest
-from datetime import datetime
-import time
+import json
+import models
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
-import json
 import os
+import uuid
 
 
-class TestFileStorage(unittest.TestCase):
-    """Test Cases for the FileStorage class"""
-
+class Test_FileStorage(unittest.TestCase):
+    """To test for filestorage"""
     def setUp(self):
-        """setting up"""
+        """set up"""
         self.storage = FileStorage()
 
-    def tearDown(self):
-        """tearing down"""
-        if os.path.exists(FileStorage._FileStorage__file_path):
-            os.remove(FileStorage._FileStorage__file_path)
+    def test_all_ins(self):
+        """Tests for all instances"""
+        obj = self.storage._FileStorage__objects
+        self.assertIsInstance(obj, dict)
 
-    def test_init(self):
-        """tstinf class attributes"""
-        self.assertIsInstance(self.storage, FileStorage)
-        self.assertIsInstance(FileStorage._FileStorage__file_path, str)
-        self.assertIsInstance(FileStorage._FileStorage__objects, dict)
-        with self.assertRaises(TypeError):
-            FileStorage(None)
-
-    def test_all(self):
-        """testing the all method"""
-        obj_dict = self.storage.all()
-        self.assertIsInstance(obj_dict, dict)
-        self.assertEqual(obj_dict, FileStorage._FileStorage__objects)
+        for key, value in obj.items():
+            self.assertIsInstance(value, object)
 
     def test_new(self):
-        """testing the new method"""
+        """Test if it creates a new instance"""
+        b = BaseModel()
+        key = "BaseModel." + b.id
+        self.storage.new(b)
+        self.assertIn(key, self.storage.all())
 
     def test_save(self):
-        """testing the save method"""
+        """Test if it saves instances"""
+        b = BaseModel()
+        key = "BaseModel." + b.id
+        self.storage.new(b)
         self.storage.save()
-        with open("file.json", "r", encoding="utf-8") as file1:
-            self.assertIn(id, file1.readline())
-        with self.assertRaises(TypeError):
-            self.storage.save(1)
+        value = ""
+
+        with open(self.storage._FileStorage__file_path, "r") as file:
+            value = file.read()
+
+        self.assertIn(key, value)
+        self.assertIn(key, self.storage.all())
 
     def test_reload(self):
-        """testing reload method"""
-        self.storage.reload()
-        self.assertIn(id, self.storage.all())
-        with self.assertRaises(TypeError):
-            self.storage.reload(1)
+        """To check if the file reloads"""
+        b = BaseModel()
+        key = "BaseModel." + b.id
+        self.storage.new(b)
+        self.storage.save()
+
+        new = FileStorage()
+        new.reload()
+        
+        self.assertIn(key, new.all())

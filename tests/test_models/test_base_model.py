@@ -41,7 +41,7 @@ class TestBaseModel(unittest.TestCase):
         self.b.save()
         new = self.b.updated_at
         self.assertNotEqual(update, new)
-        self.assertIsInstance(new, datetime)
+        self.assertEqual(type(new), datetime)
 
     def test_to_dict(self):
         """To test the dictionary respresetation of instance"""
