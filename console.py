@@ -102,8 +102,8 @@ class HBNBCommand(cmd.Cmd):
         Prints all string representation of all
         instances based or not on the class name
         """
-        if args is not None:
-            argss = args.split()
+        argss = shlex.split(args)
+        if argss:
             if argss[0] not in storage.classes():
                 print("** class doesn't exist **")
             else:
@@ -149,11 +149,38 @@ class HBNBCommand(cmd.Cmd):
                 attr_name = value[2]
                 attr_value = value[3].strip('"')
 
-                setattr(obj, attr_name, eval(attr_value))
+                # setattr(obj, attr_name, eval(attr_value))
                 setattr(obj, attr_name, attr_value)
         except Exception as e:
             pass
             storage.save()
+
+    def do_count(self, line):
+        """
+            This function counts the number of instances
+            in a class
+        """
+        count = 0
+        cls_name = line
+        obj = storage.all()
+        for key in obj.keys():
+            val = key.split('.')
+            if val[0] == cls_name:
+                count += 1
+        print(count)
+
+    def default(self, line):
+        """
+            This gets all the instance of the class
+        """
+        value = line.split('.')
+        if value[1] == "all()":
+            self.do_all(value[0])
+
+        elif value[1] == "count()":
+            self.do_count(value[0])
+
+
 
 
 if __name__ == '__main__':
