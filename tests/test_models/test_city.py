@@ -2,11 +2,19 @@
 """Unittest module for the City Class"""
 
 import unittest
-from datetime import datetime
-import time
 from models.city import City
-import json
-from models.engine.file_storage import FileStorage
-import os
-from models import storage
 from models.base_model import BaseModel
+
+
+class TestCity(unittest.TestCase):
+    """To test for city"""
+    def test_city_instance(self):
+        """To check for instance"""
+        c = City()
+        self.assertIsInstance(c, City)
+
+    def test_city_attribute(self):
+        """To check for attributes"""
+        c = City()
+        self.assertTrue(hasattr(c, 'state_id'))
+        self.assertTrue(hasattr(c, 'name'))
