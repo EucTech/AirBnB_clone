@@ -51,5 +51,4 @@ class Test_FileStorage(unittest.TestCase):
 
         new = FileStorage()
         new.reload()
-        
         self.assertIn(key, new.all())
