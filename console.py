@@ -181,7 +181,5 @@ class HBNBCommand(cmd.Cmd):
             self.do_count(value[0])
 
 
-
-
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
