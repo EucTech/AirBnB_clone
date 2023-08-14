@@ -37,8 +37,11 @@ class TestBaseModel(unittest.TestCase):
 
     def test_save(self):
         """To test if save gets update_at"""
+        update = self.b.updated_at
         self.b.save()
-        self.assertIsInstance(self.b.updated_at, datetime)
+        new = self.b.updated_at
+        self.assertNotEqual(update, new)
+        self.assertIsInstance(update, datetime)
 
     def test_to_dict(self):
         """To test the dictionary respresetation of instance"""
