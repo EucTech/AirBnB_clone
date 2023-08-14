@@ -55,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
         Prints the string representation of an
         instance based on the class name and id
         """
-        if args is None:
+        if len(args) < 1:
             print("** class name missing **")
             return
         else:
