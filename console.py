@@ -180,6 +180,16 @@ class HBNBCommand(cmd.Cmd):
         elif value[1] == "count()":
             self.do_count(value[0])
 
+        elif "show" in value[1]:
+            ins_id = value[1].split("(")[1].strip(")").strip('"')
+            val = f"{value[0]} {ins_id}"
+            self.do_show(val)
+
+        elif "destroy" in value[1]:
+            ins_id = value[1].split("(")[1].strip(")").strip('"')
+            val = f"{value[0]} {ins_id}"
+            self.do_destroy(val)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
