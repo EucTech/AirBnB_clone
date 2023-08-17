@@ -189,14 +189,30 @@ class HBNBCommand(cmd.Cmd):
             ins_id = value[1].split("(")[1].strip(")").strip('"')
             val = f"{value[0]} {ins_id}"
             self.do_destroy(val)
+        
+        if '{' in line and '}' in line and 'update' in line:
+            ins_id = value[1].split('"')[1]
+            args = line.split('(')[1].split('{')[1].split('}')[0]
+            arg = args.split(',')
+            for str1 in arg:
+                var = str1.split(':')
+                update = f'{value[0]} {ins_id} {var[0]} {var[1]}'
+                cleaned = update.replace("'", "").replace("\"", "")
+                self.do_update(cleaned)
 
-        elif "update" in value[1]:
-            arg = value[1].split("(")[1].strip(")").split(", ")
-            ins_id = arg[0].strip('"')
-            attr_name = arg[1].strip('"')
-            attr_value = arg[2].strip('"')
-            update = f"{value[0]} {ins_id} {attr_name} {attr_value}"
-            self.do_update(update)
+        else:
+            args = value[1].split('"')
+            if len(args) >= 7:
+                name, ins_id, attr, val = args[0], args[1], args[3], args[5]
+                string = f"{value[0]} {ins_id} {attr} {val}"
+                if name == "update(":
+                    self.do_update(string)
+                    return
+                elif len(args) == 6 or len(args) == 5:
+                    print("** value missing **")
+                elif len(args) == 3:
+                    print("** attribute name missing **")
+
 
 
 if __name__ == '__main__':
