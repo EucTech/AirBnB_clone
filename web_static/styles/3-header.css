@@ -2,7 +2,7 @@ header{
     height: 70px;
     width: 100;
     color: white;
-    border-bottom: 1px #CCCCCC;
+    border-bottom: 1px #CCCCCC solid;
     background: url("../images/logo.png") no-repeat;
     background-position: 20px;
 }
