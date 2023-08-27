@@ -151,3 +151,9 @@
 .places.reviews p{
     font-size: 12px;
 }
+
+@media only screen and (max-width: 1050px){
+    .pls article{
+        width: 300px;
+    }
+}
